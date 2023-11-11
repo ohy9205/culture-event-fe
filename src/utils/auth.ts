@@ -62,16 +62,22 @@ export async function getUserMe() {
   }
   try {
     console.log("getUserMe 실행");
-    const userInfo = fetch(`${API_URL}/user/me`, {
+    const response = await fetch(`${API_URL}/user/me`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
       credentials: "include",
-    })
-      .then((response) => response.json())
-      .then((data) => data);
+    });
+
+    const userInfo = await response.json();
+
+    if (userInfo.at) {
+      // at가 새로 만들어져서 왔음
+      localStorage.setItem("at", userInfo.at);
+    }
+
     return userInfo;
   } catch (err) {
     console.error("fetch error", err);
