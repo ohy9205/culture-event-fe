@@ -11,6 +11,37 @@ const MyInfo = () => {
   const { mutate, user } = useUser();
   const router = useRouter();
 
+  const commentPost = async () => {
+    const accessToken = localStorage.getItem("at");
+    const response = await fetch("http://localhost:3030/comment", {
+      method: "POST",
+      body: JSON.stringify({ content: "Hello!~", eventId: 295 }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      credentials: "include",
+    });
+
+    const data = await response.json();
+    console.log("data", data);
+  };
+
+  const commentSearch = async () => {
+    const accessToken = localStorage.getItem("at");
+    const response = await fetch("http://localhost:3030/user/comments", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      credentials: "include",
+    });
+
+    const data = await response.json();
+    console.log("data", data);
+  };
+
   useEffect(() => {
     if (!user) {
       router.push("/");
@@ -57,6 +88,19 @@ const MyInfo = () => {
         onClick={logoutHanlder}
       >
         로그아웃
+      </button>
+
+      <button
+        className="border p-2 rounded-lg bg-green-500 text-white"
+        onClick={commentPost}
+      >
+        댓글 테스트
+      </button>
+      <button
+        className="border p-2 rounded-lg bg-blue-600 text-white"
+        onClick={commentSearch}
+      >
+        댓글 조회
       </button>
     </div>
   );

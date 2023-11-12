@@ -61,7 +61,6 @@ export async function getUserMe() {
     return data;
   }
   try {
-    console.log("getUserMe 실행");
     const response = await fetch(`${API_URL}/user/me`, {
       method: "GET",
       headers: {
