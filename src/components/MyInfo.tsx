@@ -8,7 +8,7 @@ import useUser from "../hooks/useUser";
 const MyInfo = () => {
   const [email, setEmail] = useState("");
   const [nickname, setNickname] = useState("");
-  const { mutate, user } = useUser();
+  const { mutate, user, isLoading } = useUser();
   const router = useRouter();
 
   const commentPost = async () => {
@@ -43,11 +43,13 @@ const MyInfo = () => {
   };
 
   useEffect(() => {
-    if (!user) {
-      router.push("/");
-    } else {
-      setNickname(user.nick);
-      setEmail(user.email);
+    if (!isLoading) {
+      if (!user) {
+        router.push("/");
+      } else {
+        setNickname(user.nick);
+        setEmail(user.email);
+      }
     }
   }, [user]);
 
