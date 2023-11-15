@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Header from "../components/Header";
 import Script from "next/script";
+import Header from "../components/Header";
 import SWRProvider from "../provider/swrProvider";
 import "./globals.css";
 
@@ -21,7 +21,6 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <Script
-          strategy="beforeInteractive"
           src={`https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=2bye4zyjsa`}
         />
       </head>

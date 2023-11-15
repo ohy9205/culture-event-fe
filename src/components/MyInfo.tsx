@@ -9,13 +9,16 @@ const MyInfo = () => {
   const [email, setEmail] = useState("");
   const [nickname, setNickname] = useState("");
   const { mutate, user, isLoading } = useUser();
+
+  const [message, setMessage] = useState("");
+  const [count, setCount] = useState(0);
   const router = useRouter();
 
   const commentPost = async () => {
     const accessToken = localStorage.getItem("at");
     const response = await fetch("http://localhost:3030/comment", {
       method: "POST",
-      body: JSON.stringify({ content: "Hello!~", eventId: 295 }),
+      body: JSON.stringify({ content: "Hello!~", eventId: 277 }),
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
@@ -39,6 +42,82 @@ const MyInfo = () => {
     });
 
     const data = await response.json();
+    console.log("data", data);
+  };
+
+  const commentUpdate = async () => {
+    const accessToken = localStorage.getItem("at");
+    const response = await fetch("http://localhost:3030/comment/4", {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      credentials: "include",
+      body: JSON.stringify({ content: "new Content" }),
+    });
+    const data = await response.json();
+    console.log("data", data);
+  };
+
+  const deleteComment = async () => {
+    const accessToken = localStorage.getItem("at");
+    const response = await fetch("http://localhost:3030/comment/8", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      credentials: "include",
+    });
+    const data = await response.json();
+    console.log("data", data);
+  };
+
+  const myFavoriteEvent = async () => {
+    const accessToken = localStorage.getItem("at");
+    const response = await fetch("http://localhost:3030/user/liked-events", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      credentials: "include",
+    });
+
+    const data = await response.json();
+    console.log("data", data);
+  };
+
+  const favoriteToggle = async () => {
+    const accessToken = localStorage.getItem("at");
+    const response = await fetch("http://localhost:3030/v2/events/277/likes", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      credentials: "include",
+    });
+
+    const data = await response.json();
+    console.log("data", data);
+    setMessage(data.message);
+  };
+
+  const favoriteCount = async () => {
+    const accessToken = localStorage.getItem("at");
+    const response = await fetch("http://localhost:3030/v2/events/277/likes", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      credentials: "include",
+    });
+
+    const data = await response.json();
+    setCount(data.count);
     console.log("data", data);
   };
 
@@ -98,12 +177,50 @@ const MyInfo = () => {
       >
         댓글 테스트
       </button>
+
+      <button
+        className="border p-2 rounded-lg bg-green-800 text-white"
+        onClick={commentUpdate}
+      >
+        댓글 수정하기
+      </button>
+
+      <button
+        className="border p-2 rounded-lg bg-red-600 text-white"
+        onClick={deleteComment}
+      >
+        댓글 삭제하기
+      </button>
+
       <button
         className="border p-2 rounded-lg bg-blue-600 text-white"
         onClick={commentSearch}
       >
         댓글 조회
       </button>
+
+      <button
+        className="border p-2 rounded-lg bg-amber-300 text-white"
+        onClick={myFavoriteEvent}
+      >
+        내가 좋아하는 이벤트
+      </button>
+
+      <button
+        className="border p-2 rounded-lg bg-fuchsia-400 text-white"
+        onClick={favoriteToggle}
+      >
+        좋아요 테스트
+      </button>
+      <div>{message}</div>
+
+      <button
+        className="border p-2 rounded-lg bg-orange-600 text-white"
+        onClick={favoriteCount}
+      >
+        좋아요 조회
+      </button>
+      <div>좋아요 카운트: {count} </div>
     </div>
   );
 };

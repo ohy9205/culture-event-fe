@@ -8,7 +8,7 @@ const Header = () => {
         <Link href={"/"}>Home</Link>
         <Link href={"/event"}>Event</Link>
         {/* profile avatar 들어갈 자리 */}
-        <AuthLinks/>
+        <AuthLinks />
       </nav>
     </header>
   );

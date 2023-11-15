@@ -5,7 +5,6 @@ import useUser from "../hooks/useUser";
 
 const AuthLinks = () => {
   const { loggedOut, isLoading } = useUser();
-  console.log("loggedOut", loggedOut);
 
   if (isLoading) return <div>Loading...</div>;
 

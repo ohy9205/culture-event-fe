@@ -3,16 +3,14 @@ import { SimpleEvent, SimpleEventListWithPagination } from "./../types/events";
 
 // 최신순
 export async function getRecentEvents(): Promise<EventThumbnail[] | undefined> {
+  console.log("hello?");
   try {
-    const recentEvents = fetch(
-      "https://web-production-d139.up.railway.app/v1/events?orderBy=latest&pageIndex=1&pageSize=10",
-      {
-        credentials: "include",
-        next: { revalidate: 3600 },
-      }
-    )
+    const recentEvents = fetch("http://localhost:3030/v1/events/latest", {
+      credentials: "include",
+      next: { revalidate: 3600 },
+    })
       .then((rs) => rs.json())
-      .then((data) => data.payload.rows);
+      .then(async (data) => data.payload.rows);
     return recentEvents;
   } catch (e) {}
 }
@@ -20,15 +18,12 @@ export async function getRecentEvents(): Promise<EventThumbnail[] | undefined> {
 //인기순
 export async function getHotEvents(): Promise<EventThumbnail[] | undefined> {
   try {
-    const hotEvents = fetch(
-      "https://web-production-d139.up.railway.app/v1/events?orderBy=views&pageIndex=1&pageSize=7",
-      {
-        credentials: "include",
-        next: { revalidate: 3600 },
-      }
-    )
+    const hotEvents = fetch("http://localhost:3030/v1/events/popular", {
+      credentials: "include",
+      next: { revalidate: 3600 },
+    })
       .then((rs) => rs.json())
-      .then((data) => data.payload.rows)
+      .then(async (data) => data.payload.rows)
       .then((rows) =>
         rows.map((event: Event) => ({
           thumbnail: event.thumbnail,
@@ -36,7 +31,6 @@ export async function getHotEvents(): Promise<EventThumbnail[] | undefined> {
           title: event.title,
         }))
       );
-
     return hotEvents;
   } catch (e) {}
 }
@@ -44,13 +38,10 @@ export async function getHotEvents(): Promise<EventThumbnail[] | undefined> {
 // 상세정보
 export async function getEventDetail(id: number): Promise<Event | undefined> {
   try {
-    const detailEvent = fetch(
-      `https://web-production-d139.up.railway.app/v1/events/${id}`,
-      {
-        credentials: "include",
-        next: { revalidate: 3600 },
-      }
-    )
+    const detailEvent = fetch(`http://localhost:3030/v1/events/${id}`, {
+      credentials: "include",
+      next: { revalidate: 3600 },
+    })
       .then((rs) => rs.json())
       .then((data) => data.payload);
 
@@ -78,16 +69,22 @@ export async function getFilteredEvents(
   const pageIndexQuery = `pageIndex=${pageIndex + 1}&`;
   const pageSizeQuery = `pageSize=${pageSize}`;
 
+  const accessToken = localStorage.getItem("at");
+  console.log("at", accessToken);
+
   console.log(
-    `https://web-production-d139.up.railway.app/v1/events?${locationQuery}${categoryQuery}${costQuery}${startDateQuery}${endDateQuery}${orderByQuery}${pageIndexQuery}${pageSizeQuery}`
+    `http://localhost:3030/v2/events?${locationQuery}${categoryQuery}${costQuery}${startDateQuery}${endDateQuery}${orderByQuery}${pageIndexQuery}${pageSizeQuery}`
   );
 
   try {
     const filteredEvents = fetch(
-      `https://web-production-d139.up.railway.app/v1/events?${locationQuery}${categoryQuery}${costQuery}${startDateQuery}${endDateQuery}${orderByQuery}${pageIndexQuery}${pageSizeQuery}`,
+      `http://localhost:3030/v2/events?${locationQuery}${categoryQuery}${costQuery}${startDateQuery}${endDateQuery}${orderByQuery}${pageIndexQuery}${pageSizeQuery}`,
       {
         credentials: "include",
         next: { revalidate: 3600 },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       }
     )
       .then((rs) => rs.json())
@@ -115,12 +112,19 @@ export async function getFilteredEventsWithoutPagination(
   const endDateQuery = endDate && `end=${endDate}&`;
   const orderByQuery = orderBy && `orderBy=${orderBy}&`;
 
+  const accessToken = localStorage.getItem("at");
+  console.log("dsdsds Access Token", accessToken);
+  console.log("브라우저에용");
+
   try {
     const filteredEvents = fetch(
-      `https://web-production-d139.up.railway.app/v1/events?${locationQuery}${categoryQuery}${costQuery}${startDateQuery}${endDateQuery}${orderByQuery}`,
+      `http://localhost:3030/v2/events?${locationQuery}${categoryQuery}${costQuery}${startDateQuery}${endDateQuery}${orderByQuery}`,
       {
         credentials: "include",
         next: { revalidate: 3600 },
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       }
     )
       .then((rs) => rs.json())
