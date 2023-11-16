@@ -121,6 +121,24 @@ const MyInfo = () => {
     console.log("data", data);
   };
 
+  const getEventsComments = async () => {
+    const accessToken = localStorage.getItem("at");
+    const response = await fetch(
+      "http://localhost:3030/v2/events/277/comments",
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+        credentials: "include",
+      }
+    );
+
+    const data = await response.json();
+    console.log("data", data);
+  };
+
   useEffect(() => {
     if (!isLoading) {
       if (!user) {
@@ -221,6 +239,13 @@ const MyInfo = () => {
         좋아요 조회
       </button>
       <div>좋아요 카운트: {count} </div>
+
+      <button
+        className="border p-2 rounded-lg bg-cyan-400 text-white"
+        onClick={getEventsComments}
+      >
+        이벤트에 달린 댓글 조회
+      </button>
     </div>
   );
 };
