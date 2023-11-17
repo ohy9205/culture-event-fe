@@ -30,7 +30,6 @@ const MapList = ({ filter }: Props) => {
         orderBy
       );
       if (data) {
-        console.log(data);
         setEvents(data);
         setCurEvent(data[0]);
       }

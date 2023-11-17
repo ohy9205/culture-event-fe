@@ -54,7 +54,7 @@ const EventList = ({ filter }: Props) => {
             <div className="flex flex-col rounded-lg overflow-hidden h-[470px] shadow-md">
               <Image
                 src={event.thumbnail}
-                alt={`${event.title} 포스터`}
+                alt={`${event.title} ${event.id} 포스터`}
                 width={500}
                 height={500}
                 className="w-full h-[370px] object-cover"

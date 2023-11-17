@@ -1,7 +1,7 @@
 import { Comment, DetailEvent, Event, EventThumbnail } from "../types/events";
 import { SimpleEvent, SimpleEventListWithPagination } from "./../types/events";
 
-const API_BASE_URL = "https://web-production-d139.up.railway.app";
+const API_BASE_URL = "http://localhost:3030";
 const API_V1 = `${API_BASE_URL}/v1/events`;
 const API_V2 = `${API_BASE_URL}/v2/events`;
 const API_COMMENT = `${API_BASE_URL}/comment`;
@@ -32,7 +32,6 @@ export async function getHotEvents(): Promise<EventThumbnail[] | undefined> {
     })
       .then((rs) => rs.json())
       .then((data) => {
-        console.log(data);
         return data.payload.rows;
       })
       .then((rows) =>

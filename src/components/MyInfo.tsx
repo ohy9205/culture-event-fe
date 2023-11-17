@@ -31,6 +31,24 @@ const MyInfo = () => {
     router.push("/");
   };
 
+  const test = async () => {
+    console.log("tes");
+  };
+  const sessionHandler = async () => {
+    console.log("dsds?");
+    const response = await fetch("http://localhost:3030/auth/check", {
+      method: "GET",
+      credentials: "include",
+      mode: "cors",
+    });
+
+    console.log("response", response);
+
+    const data = await response.json();
+
+    console.log("data", data);
+  };
+
   return (
     <div className="flex flex-col max-w-[900px] w-full items-center gap-10 mt-[100px]">
       <div className="flex gap-4">
@@ -57,6 +75,13 @@ const MyInfo = () => {
         onClick={logoutHanlder}
       >
         로그아웃
+      </button>
+
+      <button
+        className="border p-2 rounded-lg bg-green-400 text-white"
+        onClick={sessionHandler}
+      >
+        세션 테스트
       </button>
     </div>
   );
