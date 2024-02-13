@@ -1,36 +1,25 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## [사이드 프로젝트] 서울시 문화행사 정보를 제공하는 웹사이트입니다.
 
-## Getting Started
+## as-is
 
-First, run the development server:
+- 사용자 권한별로 접근 가능한 페이지가 분리됨.
+    - Event 페이지, 마이페이지는 인증된 유저만 접근 가능.
+- 권한별로 사용 가능한 기능이 분리됨.
+    - 행사 상세 정보는 모든 유저가 접근 가능.
+    - 특정 행사 좋아요 기능, 댓글 등록, 수정, 삭제는 인증된 유저만 가능.
+- 행사 목록을 조회 시 사용자가 분류 및 검색어 필터를 적용해서 조회 가능.
+- 이벤트 페이지는 포스터 뷰와 맵 뷰 두 가지를 제공. 포스터 뷰는 페이지네이션, 맵 뷰는 무제한 스크롤 제공.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## challenge
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- 컴포넌트과 로직의 재사용성을 높이기 위해서 UI와 로직을 분리해야 한다고 판단. 컴포넌트 내부에 포함되어있던 로직들을 custom hooks로 분리.
+- 키워드 필터링을 위해 검색어 입력 시 오버헤드 방지를 위해 debounce처리. debounce는 범용적으로 사용할 수 있는 기능이므로 custom hooks으로 생성.
+- 이벤트 데이터는 수시로 업데이트 되지 않으므로 매번 api를 재호출할 필요가 없다고 판단. fetch revalidate 옵션으로 하루 단위로 업데이트 되도록 처리.
+- 두 단계 이상 전달되는 props는 리팩토링 과정에서 컴포넌트가 쪼개지거나 추가되는 경우 props 드릴링이 깊어질 수 있다고 판단. 유지보수가 쉬워지도록 전역변수로 관리.
+- 본 프로젝트는 전역 변수 tool에 의한 성능이 크게 중요하지 않다고 판단. 새로운 써드파티를 이용하지 않고 React.js의 Context API를 사용.
+- 지도 제공을 위해 naver map API 사용.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## to-be
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- 사용자 맞춤 행사 정보를 제공한다.
+- 사용자는 본인이 소유한 데이터를 모아볼 수 있다.
